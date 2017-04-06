@@ -8,6 +8,20 @@ use of TLS Client Certificates.
 * [See the index of all other EWP Specifications][develhub]
 
 
+Status
+------
+
+This method of client authentication is [planned to be
+deprecated](https://github.com/erasmus-without-paper/ewp-specs-architecture/issues/17#issuecomment-292967277)
+soon. However, currently all implementers are still REQUIRED to support it. An
+alternative method of client authentication will be specified soon.
+
+Why is it planned to be deprecated?:
+
+ * It turned out that [in some cases][norway-case] institutions are *unable* to
+   configure their proxies to accept TLS client certificates.
+
+
 Introduction
 ------------
 
