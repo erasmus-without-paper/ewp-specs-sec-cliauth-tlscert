@@ -168,6 +168,28 @@ sample](https://github.com/erasmus-without-paper/ewp-registry-service/blob/ff4a5
 This should be enough.
 
 
+#### About the `X-EWP-KeyId` header
+
+This header is **not part of this specification**, but we will mention it
+here, because it's somewhat related, and might be important during the next
+couple of months of development.
+
+Norway has requested partners to include an additional `X-EWP-KeyId` header in
+their HTTP requests, with the SHA-256 fingerprint of the partner's client
+certificate. This will allow Norwegian development (!) servers to use "fake"
+client authentication ([why?][norway-case]). This "fake" authentication will
+simply blindly trust that the request comes from the `X-EWP-KeyId` client,
+without ever asking for (nor validating) the client's certificate.
+
+There's no harm in including this header in your client code, because it won't
+"break" the authentication with the servers who already implement it properly.
+However, you still MUST provide the client certificate for those servers who
+ask for it. Also, obviously, you SHOULD NOT make use of this header in your
+server-side code, the way Norway currently does, because this doesn't provide
+any authentication. This header is included for testing development sites only,
+and SHOULD be eventually removed from your code, to avoid misconceptions.
+
+
 Security considerations
 -----------------------
 
