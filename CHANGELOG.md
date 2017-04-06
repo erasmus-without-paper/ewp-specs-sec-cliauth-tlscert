@@ -5,11 +5,20 @@ This document describes all the changes made to the *Authenticating Clients
 with TLS Certificate* document, starting from its first released version.
 
 
+1.1.0
+-----
+
+* Added the `security-entries.xsd` file. It contains the definition of an XML
+  element which can be used to reference the method of authentication described
+  in this document. See [this
+  issue](https://github.com/erasmus-without-paper/ewp-specs-sec-intro/issues/1).
+
+
 1.0.1
 -----
 
-* Add a *Status* section with the information about the upcoming deprecation.
-* Add a note describing what the `X-EWP-KeyId` header is
+* Added a *Status* section with the information about the upcoming deprecation.
+* Added a note describing what the `X-EWP-KeyId` header is
   ([why?](https://github.com/erasmus-without-paper/ewp-specs-sec-cliauth-tlscert/issues/1)).
 
 

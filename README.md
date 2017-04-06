@@ -48,12 +48,11 @@ Implementing a server
 
 ### Self-signed vs CA-signed
 
-Clients can use both
-[CA-signed](https://en.wikipedia.org/wiki/Certificate_authority) certificates
-or [self-signed](https://en.wikipedia.org/wiki/Self-signed_certificate) ones.
-Currently, this authentication method REQUIRES servers to accept both of these
-types. However, in the near future, we will also design a way for the servers
-to "say", that they will accept only CA-signed certificates.
+First, you will need to choose if you want to accept self-signed certificates
+or not. Servers MAY choose to accept only
+[CA-signed](https://en.wikipedia.org/wiki/Certificate_authority) certificates,
+or they MAY simply accept all certificates (including
+[self-signed](https://en.wikipedia.org/wiki/Self-signed_certificate) ones):
 
  * Note, that this choice does not influence transport security in any way.
    In this particular context, self-signed certificates are **exactly as
@@ -78,6 +77,15 @@ Here's why:
      Norway][norway-case], even CA-signed certificates cannot be accepted be
      the server. This started the "downfall" of this method of authentication
      in EWP, and is the main reason why it is now deprecated.
+
+ * EWP initially required *all* servers to accept self-signed certificates
+   (*Solution 1* described [here][solutions-123], but - for the reason
+   mentioned above - it no longer does. Hence, we expect that the number of
+   servers accepting self-signed client certificates will dwindle.
+
+Regardless, if you're a server developer, and you want to support self-signed
+certificates, you are free to do so. You can find some code samples
+[here](https://github.com/erasmus-without-paper/ewp-specs-architecture/issues/18#issuecomment-276961733).
 
 
 ### Ask for certificate during TLS handshake
@@ -137,8 +145,8 @@ Implementing a client
 
 First, you will need to acquire a certificate with which you will be signing
 your requests. It is RECOMMENDED to acquire a CA-signed certificate, but you
-MAY also try using a self-signed one (remember that servers will be allowed to
-NOT accept self-signed certificates in near future).
+MAY also try using a self-signed one (remember that only a limited number of
+servers will accept self-signed certificates).
 
 
 ### Publish your choice
@@ -193,11 +201,27 @@ and SHOULD be eventually removed from your code, to avoid misconceptions.
 Security considerations
 -----------------------
 
+### When to *not* use this method
+
+If server implementers **don't trust their own internal network** (the one
+between your actual server and your TLS terminator), then they MUST NOT include
+`<tlscert/>` in their `<client-auth-methods>`, because an attacker in your
+internal network might spoof such request.
+
+
 ### Main security questions
 
 The [Authentication and Security][sec-intro] document
 [recommends][sec-method-rules] that each client authentication method
 specification explicitly answers the following questions:
+
+> How the client's request must look like? How can the server detect that the
+> client is using this particular method for authentication?
+
+The server must ask for the client's certificate during the TLS handshake. If
+the client provides a certificate, the the server knows that this method is
+used. If the client doesn't provide a certificate, then the server may keep
+looking for other authentication methods (e.g. HTTP Signature).
 
 > How can the server verify which HEIs are covered by the requester?
 
@@ -224,7 +248,7 @@ One of the advantages of this method of client authentication is that **it is
 supported by most major browsers**.
 
 These command samples will show you how a self-signed client certificate can be
-installed in your browser for easy debugging. Remember, that soon servers won't
+installed in your browser for easy debugging. Remember, that most servers won't
 accept self-signed certificates, but the process of installing a CA-signed
 certificate is almost identical (steps 1-2 might need to be replaced though).
 
@@ -247,10 +271,10 @@ certificate is almost identical (steps 1-2 might need to be replaced though).
    base64-encoded part from `browser.crt.pem` file. It should look like
    [this](https://github.com/erasmus-without-paper/ewp-specs-api-discovery/blob/v4.0.1/manifest-example.xml#L66).
 
-   Note, that it doesn't have to be the same manifest file you publish your
-   Echo API with. It needs to be registered in the EWP Registry though. The
-   point of publishing it, is to inform the EWP Network (including **your own**
-   Echo API) that you will be using it.
+   Note, that it doesn't have to be the same manifest file you publish your APIs
+   with. It needs to be registered in the EWP Registry though. The point of
+   publishing it, is to inform the EWP Network (including **your own** APIs)
+   that you will be using it.
 
 4. **Convert to PFX format.** This step might be unnecessary, if your system
    and/or browser allows you to import certificates in other formats. Note,
@@ -278,26 +302,17 @@ certificate is almost identical (steps 1-2 might need to be replaced though).
      ![Advanced Options dialog](images/screenshot2.png)
 
 6. **Test it.** If you have installed your certificate successfully **AND** if
-   you have implemented Echo API with TLS Client Certificate Authentication,
-   then you should see the following when you visit your Echo API URL in your
-   browser:
+   you have implemented your HTTP endpoint with TLS Client Certificate
+   Authentication, then you should see the following when you visit your URL in
+   your browser:
 
    ![Browser asks which certificate to use](images/screenshot3.png)
 
    Your browser should ask you which client certificate you want to use for
    this session. Note, that this decision is cached by the browser for a
-   duration of the session. So, if you want to test your Echo API with multiple
+   duration of the session. So, if you want to test your endpoint with multiple
    client certificates, then you will probably want to do this in an *Incognito
    Window*.
-
-   If your Echo API works correctly **AND** the information about your client
-   certificate has already propagated through the network (see point 3 above),
-   then you should see a valid Echo API response. Note, that `<hei-id>` values
-   depend on the values of
-   [`<institutions-covered>`](https://github.com/erasmus-without-paper/ewp-specs-api-discovery/blob/v4.0.1/manifest-example.xml#L58)
-   in your manifest file.
-
-   ![An example Echo API response](images/screenshot4.png)
 
 
 [discovery-api]: https://github.com/erasmus-without-paper/ewp-specs-api-discovery
