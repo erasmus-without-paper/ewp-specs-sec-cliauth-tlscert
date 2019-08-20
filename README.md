@@ -14,7 +14,7 @@ Status
 This method of client authentication is [planned to be
 deprecated](https://github.com/erasmus-without-paper/ewp-specs-architecture/issues/17#issuecomment-292967277)
 soon. However, currently all implementers are still REQUIRED to support it. An
-alternative method of client authentication will be specified soon.
+alternative method of client authentication has been [specified](https://github.com/erasmus-without-paper/ewp-specs-sec-cliauth-httpsig).
 
 Why is it planned to be deprecated?:
 
