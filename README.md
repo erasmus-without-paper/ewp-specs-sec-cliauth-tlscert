@@ -1,5 +1,7 @@
-Authenticating Clients with TLS Certificate
-===========================================
+DEPRECATED - Authenticating Clients with TLS Certificate
+========================================================
+
+**DEPRECATED: This proposal was replaced by [HTTP Signature Authentication](https://github.com/erasmus-without-paper/ewp-specs-sec-cliauth-httpsig).**
 
 This document describes how to accomplish EWP client authentication with the
 use of TLS Client Certificates.
@@ -11,12 +13,10 @@ use of TLS Client Certificates.
 Status
 ------
 
-This method of client authentication is [planned to be
-deprecated](https://github.com/erasmus-without-paper/ewp-specs-architecture/issues/17#issuecomment-292967277)
-soon. However, currently all implementers are still REQUIRED to support it. An
-alternative method of client authentication has been [specified](https://github.com/erasmus-without-paper/ewp-specs-sec-cliauth-httpsig).
+This method of client authentication is [deprecated](https://github.com/erasmus-without-paper/ewp-specs-architecture/issues/17#issuecomment-292967277).
+All implementers are REQUIRED to use [HTTP Signature Authentication](https://github.com/erasmus-without-paper/ewp-specs-sec-cliauth-httpsig).
 
-Why is it planned to be deprecated?:
+Why is it deprecated?:
 
  * It turned out that [in some cases][norway-case] institutions are *unable* to
    configure their proxies to accept TLS client certificates.
