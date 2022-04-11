@@ -5,6 +5,12 @@ This document describes all the changes made to the *Authenticating Clients
 with TLS Certificate* document, starting from its first released version.
 
 
+1.1.1
+-----
+
+* Added information about TLS Certificate authentication being deprecated.
+
+
 1.1.0
 -----
 
